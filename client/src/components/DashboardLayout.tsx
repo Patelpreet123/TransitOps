@@ -11,6 +11,7 @@ interface DashboardLayoutProps {
 function NavIcon({ id }: { id: string }) {
   const paths: Record<string, string> = {
     dashboard: "M4 6h16M4 12h16M4 18h10",
+    vehicles: "M4 7h12l4 5v5H4zM8 17a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm8 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z",
     fleet: "M3 13h2l1-4h12l1 4h2M7 17a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm10 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z",
     drivers: "M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-7 7a7 7 0 0 1 14 0",
     trips: "M5 12h14M12 5l7 7-7 7",

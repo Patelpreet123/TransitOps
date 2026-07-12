@@ -5,6 +5,9 @@ import { DashboardPage } from "./pages/DashboardPage";
 import { DashboardShell } from "./components/DashboardLayout";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
+import { DriverManagementPage } from "./pages/DriverManagementPage";
+import { TripManagementPage } from "./pages/TripManagementPage";
+import { VehicleRegistryPage } from "./pages/VehicleRegistryPage";
 
 export function App() {
   return (
@@ -17,6 +20,9 @@ export function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardShell />}>
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/drivers" element={<DriverManagementPage />} />
+          <Route path="/trips" element={<TripManagementPage />} />
+          <Route path="/vehicles" element={<VehicleRegistryPage />} />
         </Route>
       </Route>
 

@@ -57,8 +57,9 @@ function getModulesForRole(role: Role) {
     case "FLEET_MANAGER":
       return [
         ...common,
-        { id: "fleet", label: "Fleet", path: "/fleet", enabled: false },
-        { id: "drivers", label: "Drivers", path: "/drivers", enabled: false },
+        { id: "vehicles", label: "Vehicle Registry", path: "/vehicles", enabled: true },
+        { id: "drivers", label: "Driver Management", path: "/drivers", enabled: true },
+        { id: "trips", label: "Trip Management", path: "/trips", enabled: true },
       ];
     case "DRIVER":
       return [
