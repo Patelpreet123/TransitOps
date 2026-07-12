@@ -198,7 +198,7 @@ async function loadMaintenance(id: string) {
   return prisma.maintenanceRecord.findUnique({ where: { id } });
 }
 
-router.use(requireAuth, requireRoles("FLEET_MANAGER"));
+router.use(requireAuth);
 
 router.get("/", async (req: AuthenticatedRequest, res) => {
   const search = normalizeText(getQueryParam(req.query.search as string | undefined));
@@ -226,7 +226,7 @@ router.get("/", async (req: AuthenticatedRequest, res) => {
   });
 });
 
-router.post("/", async (req: AuthenticatedRequest, res) => {
+router.post("/", requireRoles("FLEET_MANAGER"), async (req: AuthenticatedRequest, res) => {
   const parsed = validatePayload(req.body as MaintenanceInput);
   if ("error" in parsed) {
     res.status(400).json({ error: parsed.error });
@@ -279,7 +279,7 @@ router.post("/", async (req: AuthenticatedRequest, res) => {
   res.status(201).json({ maintenance: serializeMaintenance(created as MaintenanceRecord) });
 });
 
-router.put("/:id", async (req: AuthenticatedRequest, res) => {
+router.put("/:id", requireRoles("FLEET_MANAGER"), async (req: AuthenticatedRequest, res) => {
   const maintenanceId = getQueryParam(req.params.id);
   if (!maintenanceId) {
     res.status(400).json({ error: "Maintenance id is required" });
@@ -349,7 +349,7 @@ router.put("/:id", async (req: AuthenticatedRequest, res) => {
   res.json({ maintenance: serializeMaintenance(record as MaintenanceRecord) });
 });
 
-router.delete("/:id", async (req: AuthenticatedRequest, res) => {
+router.delete("/:id", requireRoles("FLEET_MANAGER"), async (req: AuthenticatedRequest, res) => {
   const maintenanceId = getQueryParam(req.params.id);
   if (!maintenanceId) {
     res.status(400).json({ error: "Maintenance id is required" });

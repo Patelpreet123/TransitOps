@@ -9,6 +9,7 @@ import { ExpenseTrackingPage } from "./pages/ExpenseTrackingPage";
 import { DriverManagementPage } from "./pages/DriverManagementPage";
 import { FuelManagementPage } from "./pages/FuelManagementPage";
 import { MaintenanceManagementPage } from "./pages/MaintenanceManagementPage";
+import { ReportsPage } from "./pages/ReportsPage";
 import { TripManagementPage } from "./pages/TripManagementPage";
 import { VehicleRegistryPage } from "./pages/VehicleRegistryPage";
 
@@ -27,6 +28,7 @@ export function App() {
           <Route path="/fuel" element={<FuelManagementPage />} />
           <Route path="/expenses" element={<ExpenseTrackingPage />} />
           <Route path="/maintenance" element={<MaintenanceManagementPage />} />
+          <Route path="/reports" element={<ReportsPage />} />
           <Route path="/trips" element={<TripManagementPage />} />
           <Route path="/vehicles" element={<VehicleRegistryPage />} />
         </Route>

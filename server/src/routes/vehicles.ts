@@ -96,16 +96,11 @@ function buildSummary(vehicles: VehicleRecord[]) {
 
 const router = Router();
 
-router.get(
-  "/registry",
-  requireAuth,
-  requireRoles("FLEET_MANAGER"),
-  (_req: AuthenticatedRequest, res) => {
-    res.json({
-      summary: buildSummary(VEHICLES),
-      vehicles: VEHICLES,
-    });
-  }
-);
+router.get("/registry", requireAuth, requireRoles("FLEET_MANAGER", "FINANCIAL_ANALYST"), (_req: AuthenticatedRequest, res) => {
+  res.json({
+    summary: buildSummary(VEHICLES),
+    vehicles: VEHICLES,
+  });
+});
 
 export default router;

@@ -351,9 +351,9 @@ function shouldAssignDriverToTrip(status: TripStatus) {
   return status === "ACTIVE";
 }
 
-router.use(requireAuth, requireRoles("FLEET_MANAGER"));
+router.use(requireAuth);
 
-router.get("/", async (req: AuthenticatedRequest, res) => {
+router.get("/", requireRoles("FLEET_MANAGER", "FINANCIAL_ANALYST"), async (req: AuthenticatedRequest, res) => {
   const search = normalizeText(getQueryParam(req.query.search as string | undefined));
   const statusFilter = normalizeText(getQueryParam(req.query.status as string | undefined));
   const sortBy = (normalizeText(getQueryParam(req.query.sortBy as string | undefined)) || "startDate") as TripSortField;
@@ -402,7 +402,7 @@ router.get("/", async (req: AuthenticatedRequest, res) => {
   });
 });
 
-router.post("/", async (req: AuthenticatedRequest, res) => {
+router.post("/", requireRoles("FLEET_MANAGER"), async (req: AuthenticatedRequest, res) => {
   const parsed = validateBasicPayload(req.body as TripInput);
   if ("error" in parsed) {
     res.status(400).json({ error: parsed.error });
@@ -451,7 +451,7 @@ router.post("/", async (req: AuthenticatedRequest, res) => {
   res.status(201).json({ trip: serializeTrip(createdTrip as TripRecord) });
 });
 
-router.put("/:id", async (req: AuthenticatedRequest, res) => {
+router.put("/:id", requireRoles("FLEET_MANAGER"), async (req: AuthenticatedRequest, res) => {
   const tripId = getQueryParam(req.params.id);
   if (!tripId) {
     res.status(400).json({ error: "Trip id is required" });
@@ -520,7 +520,7 @@ router.put("/:id", async (req: AuthenticatedRequest, res) => {
   res.json({ trip: serializeTrip(trip as TripRecord) });
 });
 
-router.delete("/:id", async (req: AuthenticatedRequest, res) => {
+router.delete("/:id", requireRoles("FLEET_MANAGER"), async (req: AuthenticatedRequest, res) => {
   const tripId = getQueryParam(req.params.id);
   if (!tripId) {
     res.status(400).json({ error: "Trip id is required" });
