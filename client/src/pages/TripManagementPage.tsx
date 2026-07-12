@@ -167,12 +167,18 @@ export function TripManagementPage() {
   };
 
   useEffect(() => {
+    if (user?.role === "DRIVER") {
+      setLoadingOptions(false);
+      setLoadingTrips(false);
+      return;
+    }
     void loadOptions();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
+    if (user?.role === "DRIVER") return;
     void loadTrips();
-  }, [search, statusFilter, sortDirection, sortField]);
+  }, [search, statusFilter, sortDirection, sortField, user]);
 
   const vehicleOptions = useMemo(
     () => vehicles.map((vehicle) => ({ ...vehicle, disabled: vehicle.lifecycleStatus === "RETIRED" || vehicle.lifecycleStatus === "IN_SHOP" })),
@@ -223,7 +229,35 @@ export function TripManagementPage() {
     return null;
   }
 
-  if (user.role !== "FLEET_MANAGER") {
+  if (user.role === "DRIVER") {
+    return (
+      <div className="dashboard-page">
+        <header className="dashboard-header">
+          <div className="dashboard-header-text">
+            <p className="dashboard-eyebrow">Driver Workspace</p>
+            <h1>My Trips</h1>
+            <p className="dashboard-subtitle">Your active and upcoming transport assignments.</p>
+          </div>
+        </header>
+
+        <section className="registry-table-card" style={{ padding: "4rem 2rem", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "1.5rem" }}>
+          <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: "var(--color-primary-soft)", color: "var(--color-primary)", display: "grid", placeItems: "center" }}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: "32px", height: "32px" }}>
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </div>
+          <div style={{ maxWidth: "500px" }}>
+            <h3 style={{ fontSize: "1.2rem", fontWeight: "700", color: "var(--color-text)", margin: "0 0 0.5rem" }}>No active trips assigned</h3>
+            <p style={{ fontSize: "0.9rem", color: "var(--color-text-muted)", lineHeight: "1.6", margin: 0 }}>
+              You are listed as standby on-duty. Once a fleet manager assigns a vehicle and a passenger transfer or freight cargo manifest to your shift, the route details and safety checks will appear here.
+            </p>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  if (user.role !== "FLEET_MANAGER" && user.role !== "FINANCIAL_ANALYST") {
     return <Navigate to="/dashboard" replace />;
   }
 

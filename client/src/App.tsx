@@ -12,6 +12,7 @@ import { MaintenanceManagementPage } from "./pages/MaintenanceManagementPage";
 import { ReportsPage } from "./pages/ReportsPage";
 import { TripManagementPage } from "./pages/TripManagementPage";
 import { VehicleRegistryPage } from "./pages/VehicleRegistryPage";
+import { FeatureInfoPage } from "./pages/FeatureInfoPage";
 
 export function App() {
   return (
@@ -31,6 +32,9 @@ export function App() {
           <Route path="/reports" element={<ReportsPage />} />
           <Route path="/trips" element={<TripManagementPage />} />
           <Route path="/vehicles" element={<VehicleRegistryPage />} />
+          <Route path="/vehicle" element={<FeatureInfoPage />} />
+          <Route path="/incidents" element={<FeatureInfoPage />} />
+          <Route path="/compliance" element={<FeatureInfoPage />} />
         </Route>
       </Route>
 

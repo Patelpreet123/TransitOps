@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { api, type ExpenseRecord, type FuelRecord, type MaintenanceRecord, type TripRecord, type VehicleRecord } from "../lib/api";
+import { api, type ExpenseRecord, type FuelRecord, type TripRecord, type VehicleRecord } from "../lib/api";
+import type { MaintenanceRecord } from "../types/maintenance";
 
 type RoleScope = "FLEET_MANAGER" | "FINANCIAL_ANALYST";
 
@@ -83,31 +84,33 @@ function DonutChart({ data, totalLabel, centerLabel }: { data: Array<{ label: st
 
   return (
     <div className="donut-wrap">
-      <svg viewBox="0 0 140 140" className="donut-svg" aria-label={centerLabel} role="img">
-        <circle className="donut-track" cx="70" cy="70" r={radius} />
-        {data.map((item) => {
-          const segment = (item.value / total) * circumference;
-          const dashArray = `${segment} ${circumference - segment}`;
-          const dashOffset = -offset;
-          offset += segment;
+      <div className="donut-chart-container">
+        <svg viewBox="0 0 140 140" className="donut-svg" aria-label={centerLabel} role="img">
+          <circle className="donut-track" cx="70" cy="70" r={radius} />
+          {data.map((item) => {
+            const segment = (item.value / total) * circumference;
+            const dashArray = `${segment} ${circumference - segment}`;
+            const dashOffset = -offset;
+            offset += segment;
 
-          return (
-            <circle
-              key={item.label}
-              className={`donut-segment tone-${item.tone}`}
-              cx="70"
-              cy="70"
-              r={radius}
-              strokeDasharray={dashArray}
-              strokeDashoffset={dashOffset}
-            />
-          );
-        })}
-      </svg>
+            return (
+              <circle
+                key={item.label}
+                className={`donut-segment tone-${item.tone}`}
+                cx="70"
+                cy="70"
+                r={radius}
+                strokeDasharray={dashArray}
+                strokeDashoffset={dashOffset}
+              />
+            );
+          })}
+        </svg>
 
-      <div className="donut-center">
-        <strong>{totalLabel}</strong>
-        <span>{centerLabel}</span>
+        <div className="donut-center">
+          <strong>{totalLabel}</strong>
+          <span>{centerLabel}</span>
+        </div>
       </div>
 
       <div className="chart-legend">

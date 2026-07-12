@@ -65,18 +65,24 @@ export function DashboardLayout({ navItems }: DashboardLayoutProps) {
                 <span>{item.label}</span>
               </NavLink>
             ) : (
-              <span key={item.id} className="nav-link disabled" title="Coming soon">
+              <span key={item.id} className="nav-link disabled">
                 <NavIcon id={item.id} />
                 <span>{item.label}</span>
-                <em className="soon-tag">Soon</em>
               </span>
             )
           )}
         </nav>
 
         <div className="sidebar-footer">
-          <p className="sidebar-user">{user?.name}</p>
-          <span className="role-badge">{user ? ROLE_LABELS[user.role] : ""}</span>
+          <div className="sidebar-profile">
+            <div className="sidebar-avatar" aria-hidden="true">
+              {user?.name ? user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase() : "U"}
+            </div>
+            <div className="sidebar-profile-info">
+              <p className="sidebar-user">{user?.name}</p>
+              <span className="role-badge">{user ? ROLE_LABELS[user.role] : ""}</span>
+            </div>
+          </div>
         </div>
       </aside>
 
@@ -109,11 +115,16 @@ export function DashboardLayout({ navItems }: DashboardLayoutProps) {
           </div>
 
           <div className="topbar-actions">
-            <div className="topbar-user hidden-mobile">
-              <strong>{user?.name}</strong>
-              <span className="role-badge">{user ? ROLE_LABELS[user.role] : ""}</span>
+            <div className="topbar-user-wrap hidden-mobile">
+              <div className="topbar-avatar" aria-hidden="true">
+                {user?.name ? user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase() : "U"}
+              </div>
+              <div className="topbar-user">
+                <strong>{user?.name}</strong>
+                <span className="role-badge">{user ? ROLE_LABELS[user.role] : ""}</span>
+              </div>
             </div>
-            <button type="button" className="btn-secondary" onClick={() => void logout()}>
+            <button type="button" className="btn-secondary logout-btn" onClick={() => void logout()}>
               Log out
             </button>
           </div>

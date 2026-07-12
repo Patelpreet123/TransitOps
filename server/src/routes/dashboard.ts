@@ -68,19 +68,19 @@ function getModulesForRole(role: Role) {
     case "DRIVER":
       return [
         ...common,
-        { id: "trips", label: "My Trips", path: "/trips", enabled: false },
-        { id: "vehicle", label: "My Vehicle", path: "/vehicle", enabled: false },
+        { id: "trips", label: "My Trips", path: "/trips", enabled: true },
+        { id: "vehicle", label: "My Vehicle", path: "/vehicle", enabled: true },
       ];
     case "SAFETY_OFFICER":
       return [
         ...common,
-        { id: "incidents", label: "Incidents", path: "/incidents", enabled: false },
-        { id: "compliance", label: "Compliance", path: "/compliance", enabled: false },
+        { id: "incidents", label: "Incidents", path: "/incidents", enabled: true },
+        { id: "compliance", label: "Compliance", path: "/compliance", enabled: true },
       ];
     case "FINANCIAL_ANALYST":
       return [
         ...common,
-        { id: "fuel", label: "Fuel Management", path: "/fuel", enabled: false },
+        { id: "fuel", label: "Fuel Management", path: "/fuel", enabled: true },
         { id: "expenses", label: "Expense Tracking", path: "/expenses", enabled: true },
         { id: "reports", label: "Reports", path: "/reports", enabled: true },
       ];

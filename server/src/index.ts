@@ -9,6 +9,7 @@ import expenseRoutes from "./routes/expenses.js";
 import fuelRoutes from "./routes/fuel.js";
 import maintenanceRoutes from "./routes/maintenance.js";
 import tripRoutes from "./routes/trips.js";
+import reportsRoutes from "./routes/reports.js";
 import vehicleRoutes from "./routes/vehicles.js";
 
 const app = express();
@@ -35,6 +36,7 @@ app.use("/api/expenses", expenseRoutes);
 app.use("/api/fuel", fuelRoutes);
 app.use("/api/maintenance", maintenanceRoutes);
 app.use("/api/trips", tripRoutes);
+app.use("/api/reports", reportsRoutes);
 app.use("/api/vehicles", vehicleRoutes);
 
 app.listen(PORT, () => {
