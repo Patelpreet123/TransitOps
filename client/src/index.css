@@ -644,6 +644,405 @@ textarea {
   font-size: 0.9rem;
 }
 
+.maintenance-page {
+  gap: 1rem;
+}
+
+.maintenance-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.maintenance-hero-meta {
+  display: grid;
+  gap: 0.45rem;
+  justify-items: end;
+}
+
+.maintenance-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.maintenance-stat-card,
+.maintenance-form-card,
+.maintenance-table-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.maintenance-stat-card {
+  padding: 1rem 1.1rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.maintenance-stat-card span {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.maintenance-stat-card strong {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+.maintenance-toolbar {
+  display: grid;
+  grid-template-columns: 1.4fr repeat(2, minmax(160px, 0.7fr)) auto;
+  gap: 1rem;
+  align-items: end;
+}
+
+.maintenance-toolbar-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.maintenance-toolbar-field span {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.maintenance-layout-grid {
+  display: grid;
+  grid-template-columns: 0.92fr 1.08fr;
+  gap: 1rem;
+}
+
+.maintenance-form-card,
+.maintenance-table-card {
+  padding: 1.15rem;
+}
+
+.maintenance-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.maintenance-form-grid label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.maintenance-wide-field {
+  grid-column: 1 / -1;
+}
+
+.maintenance-form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.maintenance-form-note {
+  margin: 0.85rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.maintenance-table-wrap {
+  overflow-x: auto;
+}
+
+.maintenance-table {
+  width: 100%;
+  min-width: 1080px;
+  border-collapse: collapse;
+}
+
+.maintenance-table th,
+.maintenance-table td {
+  text-align: left;
+  padding: 0.85rem 0.8rem;
+  border-bottom: 1px solid var(--color-border-subtle);
+  vertical-align: top;
+}
+
+.maintenance-table th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  font-weight: 800;
+}
+
+.maintenance-table td strong,
+.maintenance-table td span {
+  display: block;
+}
+
+.maintenance-table td strong {
+  font-size: 0.92rem;
+}
+
+.maintenance-table td span {
+  margin-top: 0.15rem;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+}
+
+.maintenance-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.24rem 0.58rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.status-SCHEDULED,
+.status-AVAILABLE {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.status-IN_PROGRESS,
+.status-ACTIVE,
+.status-ON_TRIP {
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+.status-COMPLETED {
+  background: #ecfeff;
+  color: #0e7490;
+}
+
+.status-CANCELLED,
+.status-ON_LEAVE {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.maintenance-empty {
+  margin: 1rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.maintenance-form-error {
+  margin-top: 0.75rem;
+}
+
+.maintenance-banner {
+  margin: 0.75rem 0 0;
+  padding: 0.8rem 0.9rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+}
+
+.finance-page {
+  gap: 1rem;
+}
+
+.finance-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.finance-hero-meta {
+  display: grid;
+  gap: 0.45rem;
+  justify-items: end;
+}
+
+.finance-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.finance-stat-card,
+.finance-form-card,
+.finance-table-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.finance-stat-card {
+  padding: 1rem 1.1rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.finance-stat-card span {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.finance-stat-card strong {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.finance-toolbar {
+  display: grid;
+  grid-template-columns: 1.4fr repeat(2, minmax(160px, 0.7fr)) auto;
+  gap: 1rem;
+  align-items: end;
+}
+
+.finance-toolbar-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.finance-toolbar-field span {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.finance-layout-grid {
+  display: grid;
+  grid-template-columns: 0.96fr 1.04fr;
+  gap: 1rem;
+}
+
+.finance-form-card,
+.finance-table-card {
+  padding: 1.15rem;
+}
+
+.finance-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.finance-form-grid label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.finance-wide-field {
+  grid-column: 1 / -1;
+}
+
+.finance-form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.finance-form-error {
+  margin-top: 0.75rem;
+}
+
+.finance-table-wrap {
+  overflow-x: auto;
+}
+
+.finance-table {
+  width: 100%;
+  min-width: 1140px;
+  border-collapse: collapse;
+}
+
+.finance-table th,
+.finance-table td {
+  text-align: left;
+  padding: 0.85rem 0.8rem;
+  border-bottom: 1px solid var(--color-border-subtle);
+  vertical-align: top;
+}
+
+.finance-table th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  font-weight: 800;
+}
+
+.finance-table td strong,
+.finance-table td span {
+  display: block;
+}
+
+.finance-table td strong {
+  font-size: 0.92rem;
+}
+
+.finance-table td span {
+  margin-top: 0.15rem;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+}
+
+.fuel-status,
+.expense-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.24rem 0.58rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.status-RECORDED,
+.status-APPROVED,
+.status-PAID {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.status-VOIDED,
+.status-REJECTED {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.status-PENDING {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.finance-empty {
+  margin: 1rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.finance-banner {
+  margin: 0.75rem 0 0;
+  padding: 0.8rem 0.9rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+}
+
 .toast-stack {
   position: fixed;
   top: 88px;
@@ -1441,6 +1840,18 @@ textarea {
     grid-template-columns: 1fr;
   }
 
+  .maintenance-stats-grid,
+  .maintenance-toolbar,
+  .maintenance-layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .finance-stats-grid,
+  .finance-toolbar,
+  .finance-layout-grid {
+    grid-template-columns: 1fr;
+  }
+
   .dashboard-bottom-grid {
     grid-template-columns: 1fr;
   }
@@ -1508,11 +1919,27 @@ textarea {
     justify-items: start;
   }
 
+  .maintenance-hero-meta {
+    justify-items: start;
+  }
+
+  .finance-hero-meta {
+    justify-items: start;
+  }
+
   .kpi-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
   .trip-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .maintenance-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .finance-form-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1547,6 +1974,16 @@ textarea {
 
   .trip-table-card,
   .trip-form-card {
+    padding: 0.9rem;
+  }
+
+  .maintenance-table-card,
+  .maintenance-form-card {
+    padding: 0.9rem;
+  }
+
+  .finance-table-card,
+  .finance-form-card {
     padding: 0.9rem;
   }
 }

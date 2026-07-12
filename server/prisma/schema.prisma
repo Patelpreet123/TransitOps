@@ -27,6 +27,25 @@ enum TripStatus {
   CANCELLED
 }
 
+enum MaintenanceStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum FuelStatus {
+  RECORDED
+  VOIDED
+}
+
+enum ExpenseStatus {
+  PENDING
+  APPROVED
+  PAID
+  REJECTED
+}
+
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -70,4 +89,64 @@ model Trip {
   @@index([status])
   @@index([vehiclePlateNumber])
   @@index([driverId])
+}
+
+model MaintenanceRecord {
+  id                 String            @id @default(cuid())
+  vehiclePlateNumber String
+  serviceType        String
+  scheduledDate      DateTime
+  completionDate     DateTime?
+  cost               Float
+  notes              String?
+  status             MaintenanceStatus @default(SCHEDULED)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  @@index([vehiclePlateNumber])
+  @@index([status])
+  @@index([scheduledDate])
+}
+
+model FuelRecord {
+  id                 String      @id @default(cuid())
+  vehiclePlateNumber String
+  tripId             String?
+  fuelType           String
+  liters             Float
+  unitPrice          Float
+  totalCost          Float
+  refueledAt         DateTime
+  odometerKm         Float?
+  notes              String?
+  status             FuelStatus  @default(RECORDED)
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+
+  @@index([vehiclePlateNumber])
+  @@index([tripId])
+  @@index([status])
+  @@index([refueledAt])
+}
+
+model ExpenseRecord {
+  id                 String         @id @default(cuid())
+  title              String
+  category           String
+  amount             Float
+  expenseDate        DateTime
+  vendor             String?
+  paymentMethod      String
+  vehiclePlateNumber String?
+  tripId             String?
+  notes              String?
+  status             ExpenseStatus  @default(PENDING)
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  @@index([category])
+  @@index([vehiclePlateNumber])
+  @@index([tripId])
+  @@index([status])
+  @@index([expenseDate])
 }

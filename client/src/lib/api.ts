@@ -1,5 +1,6 @@
 import type { DashboardSummary, User } from "../types";
 import type { DriverPayload, DriversResponse } from "../types/drivers";
+import type { MaintenancePayload, MaintenanceResponse } from "../types/maintenance";
 
 export type VehicleLifecycleStatus = "ACTIVE" | "RETIRED" | "IN_SHOP";
 
@@ -84,6 +85,131 @@ export interface VehicleRecord {
   assignedDriver: string | null;
 }
 
+export interface VehicleOptionsResponse {
+  summary: VehicleRegistryResponse["summary"];
+  vehicles: VehicleRecord[];
+}
+
+export interface FuelTripRef {
+  id: string;
+  source: string;
+  destination: string;
+  status: TripRecord["status"];
+}
+
+export interface FuelVehicleRef {
+  plateNumber: string;
+  model: string;
+  depot: string;
+  capacityKg: number;
+  lifecycleStatus: VehicleLifecycleStatus;
+}
+
+export interface FuelRecord {
+  id: string;
+  vehiclePlateNumber: string;
+  vehicle: FuelVehicleRef | null;
+  tripId: string | null;
+  trip: FuelTripRef | null;
+  fuelType: string;
+  liters: number;
+  unitPrice: number;
+  totalCost: number;
+  refueledAt: string;
+  odometerKm: number | null;
+  notes: string | null;
+  status: "RECORDED" | "VOIDED";
+  statusLabel: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface FuelSummary {
+  total: number;
+  totalLiters: number;
+  totalCost: number;
+  recorded: number;
+  voided: number;
+}
+
+export interface FuelResponse {
+  fuel: FuelRecord[];
+  summary: FuelSummary;
+}
+
+export interface FuelPayload {
+  vehiclePlateNumber: string;
+  tripId: string | null;
+  fuelType: string;
+  liters: number;
+  unitPrice: number;
+  refueledAt: string;
+  odometerKm: number | null;
+  notes: string | null;
+  status: "RECORDED" | "VOIDED";
+}
+
+export interface ExpenseTripRef {
+  id: string;
+  source: string;
+  destination: string;
+  status: TripRecord["status"];
+}
+
+export interface ExpenseVehicleRef {
+  plateNumber: string;
+  model: string;
+  depot: string;
+  capacityKg: number;
+  lifecycleStatus: VehicleLifecycleStatus;
+}
+
+export interface ExpenseRecord {
+  id: string;
+  title: string;
+  category: string;
+  amount: number;
+  expenseDate: string;
+  vendor: string | null;
+  paymentMethod: string;
+  vehiclePlateNumber: string | null;
+  vehicle: ExpenseVehicleRef | null;
+  tripId: string | null;
+  trip: ExpenseTripRef | null;
+  notes: string | null;
+  status: "PENDING" | "APPROVED" | "PAID" | "REJECTED";
+  statusLabel: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ExpenseSummary {
+  total: number;
+  totalAmount: number;
+  pending: number;
+  approved: number;
+  paid: number;
+  rejected: number;
+}
+
+export interface ExpensesResponse {
+  expenses: ExpenseRecord[];
+  summary: ExpenseSummary;
+}
+
+export interface ExpensePayload {
+  title: string;
+  category: string;
+  amount: number;
+  expenseDate: string;
+  vendor: string | null;
+  paymentMethod: string;
+  vehiclePlateNumber: string | null;
+  tripId: string | null;
+  notes: string | null;
+  status: "PENDING" | "APPROVED" | "PAID" | "REJECTED";
+}
+
 export interface VehicleRegistryResponse {
   summary: {
     totals: {
@@ -166,7 +292,7 @@ export const api = {
   },
 
   vehicleRegistry() {
-    return request<VehicleRegistryResponse>("/vehicles/registry");
+    return request<VehicleOptionsResponse>("/vehicles/registry");
   },
 
   drivers() {
@@ -206,6 +332,111 @@ export const api = {
 
   deleteTrip(id: string) {
     return request<{ message: string }>(`/trips/${id}`, { method: "DELETE" });
+  },
+
+  maintenance(query?: {
+    search?: string;
+    status?: string;
+    sortBy?: string;
+    sortOrder?: "asc" | "desc";
+  }) {
+    const params = new URLSearchParams();
+
+    if (query?.search) params.set("search", query.search);
+    if (query?.status) params.set("status", query.status);
+    if (query?.sortBy) params.set("sortBy", query.sortBy);
+    if (query?.sortOrder) params.set("sortOrder", query.sortOrder);
+
+    const suffix = params.toString().length > 0 ? `?${params.toString()}` : "";
+    return request<MaintenanceResponse>(`/maintenance${suffix}`);
+  },
+
+  fuel(query?: {
+    search?: string;
+    status?: string;
+    sortBy?: string;
+    sortOrder?: "asc" | "desc";
+  }) {
+    const params = new URLSearchParams();
+
+    if (query?.search) params.set("search", query.search);
+    if (query?.status) params.set("status", query.status);
+    if (query?.sortBy) params.set("sortBy", query.sortBy);
+    if (query?.sortOrder) params.set("sortOrder", query.sortOrder);
+
+    const suffix = params.toString().length > 0 ? `?${params.toString()}` : "";
+    return request<FuelResponse>(`/fuel${suffix}`);
+  },
+
+  createFuel(payload: FuelPayload) {
+    return request<{ fuel: FuelRecord }>("/fuel", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+  },
+
+  updateFuel(id: string, payload: FuelPayload) {
+    return request<{ fuel: FuelRecord }>(`/fuel/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+    });
+  },
+
+  deleteFuel(id: string) {
+    return request<{ message: string }>(`/fuel/${id}`, { method: "DELETE" });
+  },
+
+  expenses(query?: {
+    search?: string;
+    status?: string;
+    sortBy?: string;
+    sortOrder?: "asc" | "desc";
+  }) {
+    const params = new URLSearchParams();
+
+    if (query?.search) params.set("search", query.search);
+    if (query?.status) params.set("status", query.status);
+    if (query?.sortBy) params.set("sortBy", query.sortBy);
+    if (query?.sortOrder) params.set("sortOrder", query.sortOrder);
+
+    const suffix = params.toString().length > 0 ? `?${params.toString()}` : "";
+    return request<ExpensesResponse>(`/expenses${suffix}`);
+  },
+
+  createExpense(payload: ExpensePayload) {
+    return request<{ expense: ExpenseRecord }>("/expenses", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+  },
+
+  updateExpense(id: string, payload: ExpensePayload) {
+    return request<{ expense: ExpenseRecord }>(`/expenses/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+    });
+  },
+
+  deleteExpense(id: string) {
+    return request<{ message: string }>(`/expenses/${id}`, { method: "DELETE" });
+  },
+
+  createMaintenance(payload: MaintenancePayload) {
+    return request<{ maintenance: MaintenanceResponse["maintenance"][number] }>("/maintenance", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+  },
+
+  updateMaintenance(id: string, payload: MaintenancePayload) {
+    return request<{ maintenance: MaintenanceResponse["maintenance"][number] }>(`/maintenance/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+    });
+  },
+
+  deleteMaintenance(id: string) {
+    return request<{ message: string }>(`/maintenance/${id}`, { method: "DELETE" });
   },
 
   createDriver(payload: DriverPayload) {

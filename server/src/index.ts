@@ -5,6 +5,9 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.js";
 import dashboardRoutes from "./routes/dashboard.js";
 import driverRoutes from "./routes/drivers.js";
+import expenseRoutes from "./routes/expenses.js";
+import fuelRoutes from "./routes/fuel.js";
+import maintenanceRoutes from "./routes/maintenance.js";
 import tripRoutes from "./routes/trips.js";
 import vehicleRoutes from "./routes/vehicles.js";
 
@@ -28,6 +31,9 @@ app.get("/api/health", (_req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/drivers", driverRoutes);
+app.use("/api/expenses", expenseRoutes);
+app.use("/api/fuel", fuelRoutes);
+app.use("/api/maintenance", maintenanceRoutes);
 app.use("/api/trips", tripRoutes);
 app.use("/api/vehicles", vehicleRoutes);
 

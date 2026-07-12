@@ -60,6 +60,9 @@ function getModulesForRole(role: Role) {
         { id: "vehicles", label: "Vehicle Registry", path: "/vehicles", enabled: true },
         { id: "drivers", label: "Driver Management", path: "/drivers", enabled: true },
         { id: "trips", label: "Trip Management", path: "/trips", enabled: true },
+        { id: "maintenance", label: "Maintenance", path: "/maintenance", enabled: true },
+        { id: "fuel", label: "Fuel Management", path: "/fuel", enabled: true },
+        { id: "expenses", label: "Expense Tracking", path: "/expenses", enabled: true },
       ];
     case "DRIVER":
       return [
@@ -76,7 +79,8 @@ function getModulesForRole(role: Role) {
     case "FINANCIAL_ANALYST":
       return [
         ...common,
-        { id: "expenses", label: "Expenses", path: "/expenses", enabled: false },
+        { id: "fuel", label: "Fuel Management", path: "/fuel", enabled: false },
+        { id: "expenses", label: "Expense Tracking", path: "/expenses", enabled: true },
         { id: "reports", label: "Reports", path: "/reports", enabled: false },
       ];
     default:

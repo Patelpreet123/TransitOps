@@ -35,6 +35,45 @@ export function getVehicleByPlateNumber(plateNumber: string) {
   return VEHICLES.find((vehicle) => vehicle.plateNumber === plateNumber) ?? null;
 }
 
+export function updateVehicleByPlateNumber(
+  plateNumber: string,
+  patch: Partial<Pick<VehicleRecord, "status" | "lifecycleStatus" | "assignedDriver" | "lastService" | "nextService">>
+) {
+  const vehicle = getVehicleByPlateNumber(plateNumber);
+  if (!vehicle) {
+    return null;
+  }
+
+  Object.assign(vehicle, patch);
+  return vehicle;
+}
+
+export function setVehicleMaintenanceState(plateNumber: string, inMaintenance: boolean) {
+  const vehicle = getVehicleByPlateNumber(plateNumber);
+  if (!vehicle) {
+    return null;
+  }
+
+  vehicle.lifecycleStatus = inMaintenance ? "IN_SHOP" : vehicle.lifecycleStatus === "RETIRED" ? "RETIRED" : "ACTIVE";
+  if (vehicle.lifecycleStatus !== "RETIRED") {
+    vehicle.status = inMaintenance ? "maintenance" : vehicle.assignedDriver ? "assigned" : "available";
+  }
+
+  return vehicle;
+}
+
+export function getVehicleStatusLabel(vehicle: VehicleRecord) {
+  return vehicle.lifecycleStatus === "RETIRED"
+    ? "Retired"
+    : vehicle.lifecycleStatus === "IN_SHOP"
+      ? "In Shop"
+      : vehicle.status === "maintenance"
+        ? "Under Maintenance"
+        : vehicle.status === "assigned"
+          ? "Assigned"
+          : "Available";
+}
+
 function buildSummary(vehicles: VehicleRecord[]) {
   const totals = vehicles.reduce(
     (accumulator, vehicle) => {

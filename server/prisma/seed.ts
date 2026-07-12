@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
+import { updateVehicleByPlateNumber } from "../src/routes/vehicles.js";
 
 const prisma = new PrismaClient();
 
@@ -127,6 +128,111 @@ const demoTrips = [
   },
 ];
 
+const demoMaintenance = [
+  {
+    vehiclePlateNumber: "TR-2111",
+    serviceType: "Brake inspection",
+    scheduledDate: "2026-07-14T00:00:00.000Z",
+    completionDate: null,
+    cost: 780,
+    notes: "Scheduled follow-up after long-haul use",
+    status: "SCHEDULED" as const,
+  },
+  {
+    vehiclePlateNumber: "TR-5155",
+    serviceType: "Engine diagnostics",
+    scheduledDate: "2026-07-09T00:00:00.000Z",
+    completionDate: "2026-07-10T00:00:00.000Z",
+    cost: 1250,
+    notes: "Completed and returned to service",
+    status: "COMPLETED" as const,
+  },
+  {
+    vehiclePlateNumber: "TR-4288",
+    serviceType: "Annual inspection",
+    scheduledDate: "2026-07-11T00:00:00.000Z",
+    completionDate: null,
+    cost: 450,
+    notes: "Cancelled because vehicle is retired",
+    status: "CANCELLED" as const,
+  },
+];
+
+const demoFuel = [
+  {
+    vehiclePlateNumber: "TR-2048",
+    tripId: null,
+    fuelType: "Diesel",
+    liters: 125,
+    unitPrice: 1.42,
+    refueledAt: "2026-07-11T16:30:00.000Z",
+    odometerKm: 18485,
+    notes: "Post-route top-up",
+    status: "RECORDED" as const,
+  },
+  {
+    vehiclePlateNumber: "TR-2111",
+    tripId: null,
+    fuelType: "Diesel",
+    liters: 98,
+    unitPrice: 1.39,
+    refueledAt: "2026-07-10T09:00:00.000Z",
+    odometerKm: 16280,
+    notes: "Pre-service replenishment",
+    status: "RECORDED" as const,
+  },
+  {
+    vehiclePlateNumber: "TR-4330",
+    tripId: null,
+    fuelType: "Diesel",
+    liters: 110,
+    unitPrice: 1.44,
+    refueledAt: "2026-07-09T14:15:00.000Z",
+    odometerKm: 26890,
+    notes: "Regional fuel stop",
+    status: "RECORDED" as const,
+  },
+];
+
+const demoExpenses = [
+  {
+    title: "Toll charges - East corridor",
+    category: "Tolls",
+    amount: 84,
+    expenseDate: "2026-07-12T00:00:00.000Z",
+    vendor: "City Toll Authority",
+    paymentMethod: "Card",
+    vehiclePlateNumber: "TR-2048",
+    tripId: null,
+    notes: "Multiple passes during the morning delivery route",
+    status: "APPROVED" as const,
+  },
+  {
+    title: "Fuel card settlement",
+    category: "Fuel",
+    amount: 176.4,
+    expenseDate: "2026-07-11T00:00:00.000Z",
+    vendor: "North Depot Fuel Hub",
+    paymentMethod: "Fuel Card",
+    vehiclePlateNumber: "TR-2111",
+    tripId: null,
+    notes: "Linked to refuel event",
+    status: "PAID" as const,
+  },
+  {
+    title: "Inspection permit renewal",
+    category: "Permits",
+    amount: 240,
+    expenseDate: "2026-07-08T00:00:00.000Z",
+    vendor: "Transit Compliance Office",
+    paymentMethod: "Transfer",
+    vehiclePlateNumber: null,
+    tripId: null,
+    notes: "Pending final signoff",
+    status: "PENDING" as const,
+  },
+];
+
 async function main() {
   for (const user of demoUsers) {
     const passwordHash = await bcrypt.hash(user.password, 10);
@@ -170,6 +276,9 @@ async function main() {
   }
 
   await prisma.trip.deleteMany();
+  await prisma.maintenanceRecord.deleteMany();
+  await prisma.fuelRecord.deleteMany();
+  await prisma.expenseRecord.deleteMany();
 
   const seededDrivers = await prisma.driver.findMany({ select: { id: true, licenseNumber: true } });
   const driverByLicense = new Map(seededDrivers.map((driver) => [driver.licenseNumber, driver.id]));
@@ -207,6 +316,58 @@ async function main() {
     }
   }
 
+  for (const maintenance of demoMaintenance) {
+    await prisma.maintenanceRecord.create({
+      data: {
+        vehiclePlateNumber: maintenance.vehiclePlateNumber,
+        serviceType: maintenance.serviceType,
+        scheduledDate: new Date(maintenance.scheduledDate),
+        completionDate: maintenance.completionDate ? new Date(maintenance.completionDate) : null,
+        cost: maintenance.cost,
+        notes: maintenance.notes,
+        status: maintenance.status,
+      },
+    });
+  }
+
+  for (const fuel of demoFuel) {
+    await prisma.fuelRecord.create({
+      data: {
+        vehiclePlateNumber: fuel.vehiclePlateNumber,
+        tripId: fuel.tripId,
+        fuelType: fuel.fuelType,
+        liters: fuel.liters,
+        unitPrice: fuel.unitPrice,
+        totalCost: fuel.liters * fuel.unitPrice,
+        refueledAt: new Date(fuel.refueledAt),
+        odometerKm: fuel.odometerKm,
+        notes: fuel.notes,
+        status: fuel.status,
+      },
+    });
+  }
+
+  for (const expense of demoExpenses) {
+    await prisma.expenseRecord.create({
+      data: {
+        title: expense.title,
+        category: expense.category,
+        amount: expense.amount,
+        expenseDate: new Date(expense.expenseDate),
+        vendor: expense.vendor,
+        paymentMethod: expense.paymentMethod,
+        vehiclePlateNumber: expense.vehiclePlateNumber,
+        tripId: expense.tripId,
+        notes: expense.notes,
+        status: expense.status,
+      },
+    });
+  }
+
+  updateVehicleByPlateNumber("TR-2111", { lifecycleStatus: "IN_SHOP", status: "maintenance" });
+  updateVehicleByPlateNumber("TR-5155", { lifecycleStatus: "ACTIVE", status: "available" });
+  updateVehicleByPlateNumber("TR-4288", { lifecycleStatus: "RETIRED", status: "maintenance" });
+
   console.log("Seeded demo users:");
   for (const user of demoUsers) {
     console.log(`  ${user.email} / ${user.password} (${user.role})`);
@@ -220,6 +381,21 @@ async function main() {
   console.log("Seeded demo trips:");
   for (const trip of demoTrips) {
     console.log(`  ${trip.vehiclePlateNumber} -> ${trip.destination} (${trip.status})`);
+  }
+
+  console.log("Seeded demo maintenance records:");
+  for (const maintenance of demoMaintenance) {
+    console.log(`  ${maintenance.vehiclePlateNumber} - ${maintenance.serviceType} (${maintenance.status})`);
+  }
+
+  console.log("Seeded demo fuel records:");
+  for (const fuel of demoFuel) {
+    console.log(`  ${fuel.vehiclePlateNumber} - ${fuel.fuelType} (${fuel.liters}L)`);
+  }
+
+  console.log("Seeded demo expense records:");
+  for (const expense of demoExpenses) {
+    console.log(`  ${expense.title} (${expense.status})`);
   }
 }
 

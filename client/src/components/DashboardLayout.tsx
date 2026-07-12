@@ -15,6 +15,8 @@ function NavIcon({ id }: { id: string }) {
     fleet: "M3 13h2l1-4h12l1 4h2M7 17a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm10 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z",
     drivers: "M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-7 7a7 7 0 0 1 14 0",
     trips: "M5 12h14M12 5l7 7-7 7",
+    maintenance: "M12 2 2 7l10 5 10-5-10-5Zm0 7L2 4v12l10 5 10-5V4l-10 5Z",
+    fuel: "M8 3h8v3H8zM6 6h12v10a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4V6zm4 3v8m4-8v8",
     vehicle: "M7 17h10M5 12h14M9 7h6",
     incidents: "M12 9v4m0 4h.01M10.3 3.6 2.5 17h19L13.7 3.6a1 1 0 0 0-1.7 0Z",
     compliance: "M9 12l2 2 4-4M7 20h10a2 2 0 0 0 2-2V8l-6-4H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z",
