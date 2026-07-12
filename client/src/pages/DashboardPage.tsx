@@ -1,56 +1,77 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { api } from "../lib/api";
-import { ROLE_LABELS, type DashboardSummary } from "../types";
+import { ActivityPanel } from "../components/dashboard/ActivityPanel";
+import { DashboardFiltersBar } from "../components/dashboard/DashboardFilters";
+import { DashboardHeader } from "../components/dashboard/DashboardHeader";
+import { DashboardSkeleton } from "../components/dashboard/DashboardSkeleton";
+import { KpiCard } from "../components/dashboard/KpiCard";
+import { RoleInsightPanel } from "../components/dashboard/RoleInsightPanel";
+import { UtilizationGauge } from "../components/dashboard/UtilizationGauge";
+import {
+  DEFAULT_FILTERS,
+  getFleetKpis,
+  getRoleConfig,
+  KPI_DEFINITIONS,
+} from "../data/mockDashboard";
+import type { DashboardFilters } from "../types/dashboard";
 
 export function DashboardPage() {
   const { user } = useAuth();
-  const [summary, setSummary] = useState<DashboardSummary | null>(null);
-  const [error, setError] = useState("");
+  const [filters, setFilters] = useState<DashboardFilters>(DEFAULT_FILTERS);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api
-      .dashboardSummary()
-      .then(setSummary)
-      .catch((err: Error) => setError(err.message));
+    const timer = window.setTimeout(() => setLoading(false), 480);
+    return () => window.clearTimeout(timer);
   }, []);
 
-  if (error) {
-    return <p className="error">{error}</p>;
+  const roleConfig = useMemo(
+    () => (user ? getRoleConfig(user.role) : null),
+    [user]
+  );
+
+  const kpis = useMemo(() => getFleetKpis(filters), [filters]);
+
+  const sortedKpis = useMemo(() => {
+    if (!roleConfig) return KPI_DEFINITIONS;
+
+    const primary = new Set(roleConfig.primaryKpis);
+    return [
+      ...KPI_DEFINITIONS.filter((kpi) => primary.has(kpi.id)),
+      ...KPI_DEFINITIONS.filter((kpi) => !primary.has(kpi.id)),
+    ];
+  }, [roleConfig]);
+
+  if (!user || !roleConfig) {
+    return null;
   }
 
-  if (!summary) {
-    return <p>Loading dashboard...</p>;
+  if (loading) {
+    return <DashboardSkeleton />;
   }
 
   return (
     <div className="dashboard-page">
-      <h2>{summary.welcomeMessage}</h2>
-      <p className="muted">
-        Signed in as <strong>{user?.email}</strong> with the{" "}
-        <strong>{user ? ROLE_LABELS[user.role] : ""}</strong> role.
-      </p>
+      <DashboardHeader user={user} config={roleConfig} />
 
-      <section className="card-grid">
-        <article className="info-card">
-          <h3>Your access level</h3>
-          <p>
-            Navigation and API routes are filtered by your role. Future modules
-            (vehicles, trips, maintenance, fuel, reports) will appear here as
-            they are built.
-          </p>
-        </article>
+      <DashboardFiltersBar filters={filters} onChange={setFilters} />
 
-        <article className="info-card">
-          <h3>Available soon</h3>
-          <ul>
-            {summary.modules
-              .filter((item) => !item.enabled)
-              .map((item) => (
-                <li key={item.id}>{item.label}</li>
-              ))}
-          </ul>
-        </article>
+      <section className="kpi-grid" aria-label="Fleet KPI metrics">
+        {sortedKpis.map((definition, index) => (
+          <KpiCard
+            key={definition.id}
+            definition={definition}
+            value={kpis[definition.id]}
+            highlighted={roleConfig.primaryKpis.includes(definition.id)}
+            delay={index * 50}
+          />
+        ))}
+      </section>
+
+      <section className="dashboard-bottom-grid">
+        <UtilizationGauge value={kpis.fleetUtilization} />
+        <RoleInsightPanel config={roleConfig} kpis={kpis} />
+        <ActivityPanel filters={filters} />
       </section>
     </div>
   );

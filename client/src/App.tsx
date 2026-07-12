@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { PublicRoute } from "./components/PublicRoute";
 import { DashboardPage } from "./pages/DashboardPage";
-import { DashboardShell } from "./pages/DashboardShell";
+import { DashboardShell } from "./components/DashboardLayout";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 
